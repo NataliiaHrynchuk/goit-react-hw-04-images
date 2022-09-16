@@ -1,5 +1,5 @@
 import {HiOutlineSearch} from "react-icons/hi";
-import * as SC from './SearchFormBtn.style';
+import * as SC from './Searchbar.style';
 
 export const SearchFormBtn = () => { 
     return <SC.SearchFormBtn type="submit">
