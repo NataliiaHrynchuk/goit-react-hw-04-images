@@ -1,6 +1,6 @@
 import React from "react";
 
-
+import {HiOutlineSearch} from "react-icons/hi";
 import { SearchFormBtn } from './SearchFormBtn';
 import * as SC from './Searchbar.style';
 
@@ -28,8 +28,8 @@ import * as SC from './Searchbar.style';
 
         render() {
           return <SC.SearchForm onSubmit={this.handleSubmit}>
-            <SearchFormBtn>
-      
+            <SearchFormBtn type="submit">
+              <HiOutlineSearch/>
             </SearchFormBtn>
 
             <SC.SearchFormInput
@@ -37,6 +37,7 @@ import * as SC from './Searchbar.style';
               name="imagesName"
               value={this.state.query}
               onChange={this.handleNameChange}
+              autoFocus
               autocomplete="off"
               placeholder="Search images and photos"
             />
