@@ -1,14 +1,13 @@
 import * as SC from './ImageGalleryItem.style';
 import PropTypes from 'prop-types';
 
-export const ImageGalleryItem = ({ item, toggleModal }) => {
-    const { webformatURL, tags, largeImageUrl } = item;
-    return <SC.ImageGalleryItem>
+export const ImageGalleryItem = ({ item, onSelect }) => {
+    const { webformatURL, tags, largeImageURL } = item;
+    return <SC.ImageGalleryItem >
         <SC.ImageGalleryItemImage
-            // type="button"
             src={webformatURL}
             alt={tags}
-            onClick={() => toggleModal(largeImageUrl)}
+            onClick={() => onSelect(largeImageURL)}
         ></SC.ImageGalleryItemImage>
     </SC.ImageGalleryItem>
 }

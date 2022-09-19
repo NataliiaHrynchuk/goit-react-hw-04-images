@@ -43,6 +43,7 @@ export default class App extends Component {
       showModal: !showModal
     }));
   };
+  
 
   componentDidUpdate(prevProps, prevState) {
     const {imagesName, page} = this.state;

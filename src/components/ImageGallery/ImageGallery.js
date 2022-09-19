@@ -5,11 +5,11 @@ import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
 export const ImageGallery = ({ images, toggleModal}) => {
     return <SC.ImageGallery>
         {images.map(image => (
-            <ImageGalleryItem
-                key={image.id}
-                item={image}
-                toggleModal={toggleModal}
-            />
+                <ImageGalleryItem
+                    key={image.id}
+                    item={image}
+                    onSelect={toggleModal}
+                    />
         ))}
     </SC.ImageGallery>
 }
@@ -17,7 +17,7 @@ ImageGallery.propTypes = {
     images: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number.isRequired,
-            largeImageUrl: PropTypes.string.isRequired,
+            largeImageUrl: PropTypes.string,
             webformatURL: PropTypes.string.isRequired,
         }),
     ),
