@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import { ImageGallery } from './ImageGallery/ImageGallery.js';
 import { Button } from './Button/Button';
+import { Loader } from './Loader/Loader';
+import {Modal} from './Modal/Modal';
 import SearchForm from './Searchbar/SearchForm';
 import * as SC from './Searchbar/Searchbar.style';
 import * as API from 'services/api';
@@ -10,7 +12,11 @@ export default class App extends Component {
     imagesName: '',
     page: 1,
     images: [],
-    totalPage: ''
+    totalPage: '',
+    status: 'idle',
+    error: null,
+    showModal: false,
+    selectedImage: null,
   }
 
   handleFormSubmit = query => {
@@ -18,7 +24,8 @@ export default class App extends Component {
       imagesName: query,
       page: 1,
       images: [],
-      totalPage: ''
+      totalPage: '',
+      
     });
   }
 
@@ -30,31 +37,67 @@ export default class App extends Component {
     )
   }
   
+  toggleModal = async largeImg => {
+    await this.setState({ selectedImage: largeImg });
+    this.setState(({ showModal }) => ({
+      showModal: !showModal
+    }));
+  };
+
   componentDidUpdate(prevProps, prevState) {
     const {imagesName, page} = this.state;
     if (prevState.imagesName!== this.state.imagesName || prevState.page !== this.state.page) {
-      API.getImages(imagesName, page).then((data) => {
-        const { hits } = data;
-        this.setState({ images: hits });
-        const totalPage = data.totalHits / 12;
-        this.setState({ totalPage: totalPage });
-      });
+      this.setState({ status: 'pending' });
+      API.getImages(imagesName, page)
+        .then((data) => {
+        const totalPage = Math.ceil(data.totalHits / 12);
+          const receivedValues = data.hits.map(
+            ({ id,
+              webformatURL,
+              largeImageURL,
+              tags,
+            }) => {
+              return {
+                id,
+                webformatURL,
+                largeImageURL,
+                tags,
+              };
+            }
+          );
+        this.setState(prevState => ({
+          images: [...prevState.images, ...receivedValues],
+          totalPage: totalPage,
+          status: 'resolved',
+        }));
+        })
+      .catch (error => this.setState({ error, status: 'rejected' }));
     }
   }
   render() {
+    const {page, status, error, images, totalPage, showModal, selectedImage} = this.state;
     return (
       <>
         <SC.Searchbar >
           <SearchForm onSubmit={this.handleFormSubmit}></SearchForm>
         </SC.Searchbar>
-        {this.state.images &&
-          <ImageGallery images={this.state.images}
+        {status === 'pending' && <Loader />}
+        {status === 'rejected' && <p>{error.message}</p>}
+        {images &&
+          <ImageGallery
+            images={images}
+            toggleModal={this.toggleModal}
           ></ImageGallery>}
-        {this.state.page < this.state.totalPage && 
+        {page < totalPage && 
           <Button
             children='Load more'
             onClick={this.loadMore}>
           </Button>}
+        {showModal && <Modal
+          onClose={this.toggleModal}><img src={selectedImage} alt="" />
+        </Modal>
+          
+        }
       </>
     );
   }
