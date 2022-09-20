@@ -80,7 +80,7 @@ export default class App extends Component {
     return (
       <>
         <SC.Searchbar >
-          <SearchForm onSubmit={this.handleFormSubmit}></SearchForm>
+          <SearchForm onSubmit={this.handleFormSubmit}/>
         </SC.Searchbar>
         
         {status === 'rejected' && <p>{error.message}</p>}
@@ -88,13 +88,13 @@ export default class App extends Component {
           <ImageGallery
             images={images}
             toggleModal={this.toggleModal}
-          ></ImageGallery>}
+          />}
         {status === 'pending' && <Loader />}
         {page < totalPage && 
           <Button
             children='Load more'
-            onClick={this.loadMore}>
-          </Button>}
+            onClick={this.loadMore}/>
+          }
         {showModal && <Modal
           onClose={this.toggleModal}><img src={selectedImage} alt="" />
         </Modal>
