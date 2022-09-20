@@ -82,13 +82,14 @@ export default class App extends Component {
         <SC.Searchbar >
           <SearchForm onSubmit={this.handleFormSubmit}></SearchForm>
         </SC.Searchbar>
-        {status === 'pending' && <Loader />}
+        
         {status === 'rejected' && <p>{error.message}</p>}
         {images &&
           <ImageGallery
             images={images}
             toggleModal={this.toggleModal}
           ></ImageGallery>}
+        {status === 'pending' && <Loader />}
         {page < totalPage && 
           <Button
             children='Load more'
